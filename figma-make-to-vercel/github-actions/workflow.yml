@@ -1,0 +1,75 @@
+name: Fix Figma Make Images for Vercel
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+    paths:
+      - 'public/assets/**/*.png'
+      - 'src/assets/**/*.png'
+      - 'build/assets/**/*.png'
+
+jobs:
+  decode-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    # Only run if commit is from Figma Make or contains specific message
+    # IMPORTANT: Exclude commits from GitHub Actions to prevent infinite loops
+    if: |
+      (github.actor == 'figma[bot]' || 
+       contains(github.event.head_commit.message, 'Update files from Figma Make') ||
+       contains(github.event.head_commit.message, 'Figma Make')) &&
+      !contains(github.event.head_commit.message, 'fix: decode base64 images')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Decode base64 images
+        run: |
+          node figma-make-to-vercel/decode-base64-images.js
+        continue-on-error: true
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit decoded images
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/assets/ src/assets/ build/assets/
+          git commit -m "fix: decode base64 images from Figma Make for Vercel compatibility
+
+          - Automatically decoded base64-encoded PNG files to binary format
+          - Images are now compatible with Vercel deployments
+          - Triggered by: ${{ github.event.head_commit.message }}" || exit 0
+          git push
+
+      - name: Summary - Changes detected
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          echo "✅ Successfully decoded base64 images and committed changes"
+
+      - name: Summary - No changes
+        if: steps.check-changes.outputs.has_changes == 'false'
+        run: |
+          echo "ℹ️  No base64-encoded images found. All images are already binary."
+

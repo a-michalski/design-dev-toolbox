@@ -1,0 +1,12 @@
+{
+  "name": "your-project",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "npm run decode-images",
+    "build": "vite build",
+    "decode-images": "node figma-make-to-vercel/decode-base64-images.js",
+    "postinstall": "npm run decode-images"
+  }
+}
+
