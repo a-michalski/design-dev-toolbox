@@ -1,0 +1,28 @@
+{
+  "name": "figma-make-to-pdf",
+  "version": "1.0.0",
+  "description": "Generic tool for exporting Figma Make presentations to PDF",
+  "main": "export-to-pdf.ts",
+  "scripts": {
+    "install": "tsx install.ts",
+    "export": "tsx export-to-pdf.ts"
+  },
+  "keywords": [
+    "figma",
+    "pdf",
+    "export",
+    "presentation",
+    "slides"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/puppeteer": "^5.4.7",
+    "pdf-lib": "^1.17.1",
+    "puppeteer": "^24.30.0",
+    "tsx": "^4.20.6"
+  }
+}
+
