@@ -32,6 +32,19 @@ Fix base64-encoded PNG images that Figma Make generates, making them compatible 
 
 [📖 Read more →](./figma-make-to-vercel/README.md)
 
+### 🎨 [Design Tokens Template](./prompts-and-guidelines/design-tokens/)
+
+A comprehensive template and guide for implementing W3C-compliant Design Tokens systems in Figma Make projects. Provides reusable prompts, naming conventions, and best practices for maintainable theming.
+
+**Features:**
+- W3C Design Tokens Format compliance
+- Two-layer architecture (primitive + semantic)
+- Ready-to-use file templates
+- Complete implementation checklist
+- Migration guide for existing projects
+
+[📖 Read more →](./prompts-and-guidelines/design-tokens/README.md)
+
 ## Why These Tools?
 
 When using **Figma Make** to automatically sync Figma designs to code, you may encounter:
